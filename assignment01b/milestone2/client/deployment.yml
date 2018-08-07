@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: cnu2018-dev
+  name: asingla-ass01b-client-container 
+spec:
+  containers:
+    - name: asingla-ass01b-client-container
+      image: registry2.swarm.devfactory.com/asingla-cnu-ass01b-client
+      env:
+      - name: PORT
+        value: "9999"
+      - name: SERVER_HOSTNAME
+        value: "10.111.149.43"
+      volumeMounts:
+      - name: arpit-singla-random
+        mountPath: /clientdata
+        readOnly: false
+      args:
+      - tail
+      - -f
+      - /dev/null
+  volumes:
+  - name: arpit-singla-random
+    configMap:
+      name: arpit-singla-random

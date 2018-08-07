@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: asingla-ass01b-server-container
-      image: registry2.swarm.devfactory.com/cnu-ass01b-server
+      image: registry2.swarm.devfactory.com/asingla-cnu-ass01b-server
       env:
       - name: PORT
         value: "9999"

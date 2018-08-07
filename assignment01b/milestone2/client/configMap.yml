@@ -1,0 +1,6 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arpit-singla-random
+  namespace: cnu2018-dev

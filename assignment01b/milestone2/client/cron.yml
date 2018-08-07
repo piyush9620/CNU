@@ -1,0 +1,31 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: cnu2018-dev
+  name: asingla-ass01b-cronjob 
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: asingla-ass01b-client-container
+              image: registry2.swarm.devfactory.com/asingla-cnu-ass01b-client
+              env:
+              - name: PORT
+                value: "9999"
+              - name: SERVER_HOSTNAME
+                value: "10.111.149.43"                     #TODO 
+              volumeMounts:
+              - name: arpit-singla-random
+                mountPath: /clientdata
+              args:
+              - /bin/sh
+              - /client.sh
+          restartPolicy: OnFailure
+          volumes:
+          - name: arpit-singla-random
+            configMap:
+              name: arpit-singla-random
