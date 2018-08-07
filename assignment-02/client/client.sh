@@ -1,14 +1,12 @@
 set -e;
 
-clientdata_path="/tmp/clientdata";
+clientdata_path="/clientdata/x";
 port=9999;
 
 data="$(nc localhost $port)";
-echo $data;
 checksum_received="$(echo $data | cut -d'|' -f1)";
-echo $checksum_received;
-echo "$data" | cut -d'|' -f2- > "$clientdata_path";
-checksum_calculated="$(md5 "$clientdata_path" | cut -d' ' -f1)";
+printf "$data" | awk '{split($0,a,"|"); printf a[2]}' > "$clientdata_path";
+checksum_calculated="$(md5sum "$clientdata_path" | cut -d' ' -f1)";
 
 if [ "$checksum_calculated" == "$checksum_received" ]
 then
