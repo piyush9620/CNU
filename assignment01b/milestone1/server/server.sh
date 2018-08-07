@@ -1,7 +1,7 @@
 set -e;
 
 serverdata_path="/serverdata/x";
-port=9999;
+port=$PORT;
 
 export LC_ALL=C;
 cat /dev/urandom | tr -dc 'a-zA-Z0-9' | dd of="$serverdata_path" bs=1024 count=1;
