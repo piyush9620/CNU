@@ -16,20 +16,16 @@ public class ImageOperation {
     private BufferedImage inputImage;
     private BufferedImage operatedImage;
 
-    public ImageOperation() {
-        inputFile = new File(imagePath);
-    }
-
     private void fixResolution() {
         if (width == 0 && height == 0) {
             width = inputImage.getWidth();
             height = inputImage.getHeight();
         }
         else if (width == 0) {
-            width = (int) Math.round((double)width / (double)height * (double)height);
+            width = (int) Math.floor((double)inputImage.getWidth() / (double)inputImage.getHeight() * (double)height);
         }
         else if (height == 0) {
-            height = (int) Math.round((double)height / (double)width * (double)width);
+            height = (int) Math.floor((double)inputImage.getHeight() / (double)inputImage.getWidth() * (double)width);
         }
     }
 
@@ -43,6 +39,7 @@ public class ImageOperation {
     }
 
     public void start() throws IOException {
+        inputFile = new File(imagePath);
         inputImage = ImageIO.read(inputFile);
         resize();
     }

@@ -10,10 +10,10 @@ import java.util.List;
 
 public class Main {
 
-//    private final static String INPUT_LIST_PATH = "/var/data/input/jobs.json";
-    private final static String INPUT_LIST_PATH = "/tmp/test.json";
-//    private final static String OUTPUT_IMAGE_PATH = "/var/data/output/";
-    private final static String OUTPUT_IMAGE_PATH = "/tmp";
+    private final static String INPUT_LIST_PATH = "/var/data/input/jobs.json";
+//    private final static String INPUT_LIST_PATH = "/tmp/test.json";
+    private final static String OUTPUT_IMAGE_PATH = "/var/data/output/";
+//    private final static String OUTPUT_IMAGE_PATH = "/tmp";
 
     public static List<ImageOperation> parseInput(String operationsPath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
