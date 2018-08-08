@@ -6,26 +6,33 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImageConverter {
     public String imagePath;
-    public ImageOperation operation;
+    public List<ImageOperation> operations;
     private File inputFile;
     private BufferedImage inputImage;
     private BufferedImage operatedImage;
 
     public void start() {
-        operatedImage = operation.start(inputImage);
+        operations = operations.stream()
+                  .filter(imageOperation ->  imageOperation.isValid())
+                  .distinct()
+                  .collect(Collectors.toList());
+
+        operatedImage = inputImage;
+        for (ImageOperation operation: operations) {
+            operatedImage = operation.start(operatedImage);
+        }
     }
 
-    public void sanitizeInput() throws IOException {
+    public void sanitizeOperations() throws IOException {
         inputFile = new File(imagePath);
         inputImage = ImageIO.read(inputFile);
-        operation.sanitizeInput(inputImage);
-    }
-
-    public Boolean isValid() {
-        return operation.isValid();
+        operations.stream()
+                  .forEach(operation -> operation.sanitizeInput(inputImage));
     }
 
     public void save(String outputPath) throws IOException {

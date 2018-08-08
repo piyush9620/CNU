@@ -28,16 +28,9 @@ public class Main {
         List<ImageConverter> imageConversions = parseInput(INPUT_LIST_PATH);
         imageConversions
                 .stream()
-                .filter((imageConversion) -> {
-                    try {
-                        imageConversion.sanitizeInput();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return imageConversion.isValid();
-                })
                 .forEach(imageConversion -> {
                     try {
+                        imageConversion.sanitizeOperations();
                         imageConversion.start();
                         imageConversion.save(OUTPUT_IMAGE_PATH);
                     } catch (IOException e) {

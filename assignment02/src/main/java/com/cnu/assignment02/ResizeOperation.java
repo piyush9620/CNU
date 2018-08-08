@@ -28,4 +28,18 @@ public class ResizeOperation extends ImageOperation {
     public BufferedImage start(BufferedImage inputImage) {
         return ImageUtils.resizeImage(inputImage, width, height);
     }
+
+    @Override
+    public int hashCode() {
+        return width*31 + height;
+    }
+
+    @Override
+    public boolean equals(Object op) {
+        if (op instanceof ResizeOperation) {
+            ResizeOperation rp = (ResizeOperation) op;
+            return rp.height == height && rp.width == width;
+        }
+        return false;
+    }
 }

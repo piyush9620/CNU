@@ -30,4 +30,18 @@ public class RotateOperation extends ImageOperation {
     public void sanitizeInput(BufferedImage inputImage) {
         degrees = (degrees + 360)%360;
     }
+
+    @Override
+    public int hashCode() {
+        return degrees;
+    }
+
+    @Override
+    public boolean equals(Object op) {
+        if (op instanceof RotateOperation) {
+            RotateOperation rp = (RotateOperation) op;
+            return rp.degrees == degrees;
+        }
+        return false;
+    }
 }

@@ -40,4 +40,17 @@ public class NegativeOperation extends ImageOperation {
     public void sanitizeInput(BufferedImage inputImage) {
 
     }
+
+    @Override
+    public int hashCode() {
+        return 12;
+    }
+
+    @Override
+    public boolean equals(Object op) {
+        if (op instanceof NegativeOperation) {
+            return true;
+        }
+        return false;
+    }
 }

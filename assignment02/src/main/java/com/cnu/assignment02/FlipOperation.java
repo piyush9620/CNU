@@ -48,4 +48,18 @@ public class FlipOperation extends ImageOperation {
         if (!(orientation.equals("horizontal") || orientation.equals("vertical")))
             isInvalid = true;
     }
+
+    @Override
+    public int hashCode() {
+        return orientation.equals("horizontal")? 1 : 0;
+    }
+
+    @Override
+    public boolean equals(Object op) {
+        if (op instanceof FlipOperation) {
+            FlipOperation fp = (FlipOperation) op;
+            return fp.orientation.equals(orientation);
+        }
+        return false;
+    }
 }

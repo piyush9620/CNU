@@ -34,4 +34,17 @@ public class ScaleOperation extends ImageOperation {
     public BufferedImage start(BufferedImage inputImage) {
         return ImageUtils.resizeImage(inputImage, widthInt, heightInt);
     }
+    @Override
+    public int hashCode() {
+        return (int) (width*31 + height);
+    }
+
+    @Override
+    public boolean equals(Object op) {
+        if (op instanceof ScaleOperation) {
+            ScaleOperation sp = (ScaleOperation) op;
+            return sp.height == height && sp.width == width;
+        }
+        return false;
+    }
 }
