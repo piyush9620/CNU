@@ -6,18 +6,22 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class ImageConverter {
     public String imagePath;
     public File inputFile;
-    public ImageOperation operation;
+    public List<ImageOperation> operations;
     public BufferedImage inputImage;
     public BufferedImage operatedImage;
 
     public void convert() throws IOException {
         inputFile = new File(imagePath);
         inputImage = ImageIO.read(inputFile);
-        operatedImage = operation.start(inputImage);
+        operatedImage = inputImage;
+        for (ImageOperation operation: operations) {
+            operatedImage = operation.start(operatedImage);
+        }
     }
 
     public void save(String outputPath) throws IOException {
