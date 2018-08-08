@@ -13,38 +13,38 @@ public class Main {
     private final static String INPUT_LIST_PATH = System.getenv("INPUT_LIST_PATH");
     private final static String OUTPUT_IMAGE_PATH = System.getenv("OUTPUT_IMAGE_PATH");
 
-    private static List<ImageOperation> parseInput(String operationsPath) throws IOException {
+    private static List<ImageConverter> parseInput(String conversionsPath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<ImageOperation> imageOperations = objectMapper.readValue(
-                new File(operationsPath),
-                new TypeReference<List<ImageOperation>>(){}
-                );
+        List<ImageConverter> imageConversions = objectMapper.readValue(
+                new File(conversionsPath),
+                new TypeReference<List<ImageConverter>>(){}
+        );
 
-        return imageOperations;
+        return imageConversions;
     }
 
+
     public static void main(String args[]) throws IOException {
-        List<ImageOperation> imageOperations = parseInput(INPUT_LIST_PATH);
-        imageOperations
+        List<ImageConverter> imageConversions = parseInput(INPUT_LIST_PATH);
+        imageConversions
                 .stream()
-                .filter((imageOperation) -> {
+                .filter((imageConversion) -> {
                     try {
-                        imageOperation.sanitizeInput();
+                        imageConversion.sanitizeInput();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    return imageOperation.isValid();
+                    return imageConversion.isValid();
                 })
-                .forEach(imageOperation -> {
+                .forEach(imageConversion -> {
                     try {
-                        imageOperation.start();
-                        imageOperation.save(OUTPUT_IMAGE_PATH);
+                        imageConversion.start();
+                        imageConversion.save(OUTPUT_IMAGE_PATH);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
         System.out.println("Done");
     }
-
 
 }
