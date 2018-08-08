@@ -18,10 +18,10 @@ public class ResizeOperation extends ImageOperation {
             height = inputImage.getHeight();
         }
         else if (width == 0) {
-            width = (int) Math.round((double)inputImage.getWidth() / (double)inputImage.getHeight() * (double)height);
+            width = (int) Math.floor((double)inputImage.getWidth() / (double)inputImage.getHeight() * (double)height);
         }
         else if (height == 0) {
-            height = (int) Math.round((double)inputImage.getHeight() / (double)inputImage.getWidth() * (double)width);
+            height = (int) Math.floor((double)inputImage.getHeight() / (double)inputImage.getWidth() * (double)width);
         }
     }
 
