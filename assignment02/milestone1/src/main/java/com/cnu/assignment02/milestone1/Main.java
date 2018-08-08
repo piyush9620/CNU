@@ -15,8 +15,8 @@ import org.apache.commons.io.FilenameUtils;
 
 public class Main {
 
-    private final static String INPUT_LIST_PATH = "/tmp/test.json";
-    private final static String OUTPUT_IMAGE_PATH = "/tmp";
+    private final static String INPUT_LIST_PATH = "/var/data/input/jobs.json";
+    private final static String OUTPUT_IMAGE_PATH = "/var/data/output/";
 
     public static List<InputImage> parseInput(String path) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
