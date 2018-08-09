@@ -28,6 +28,6 @@ public class RotateOperation extends ImageOperation {
 
     @Override
     public void sanitizeInput(BufferedImage inputImage) {
-        degrees = (degrees + 360)/degrees;
+        degrees = (degrees + 360)%360;
     }
 }

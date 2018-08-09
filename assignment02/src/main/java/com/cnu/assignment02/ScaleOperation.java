@@ -16,10 +16,10 @@ public class ScaleOperation extends ImageOperation {
             height = 1f;
         }
         else if (width == null) {
-            width = (float) Math.floor((double)inputImage.getWidth() / (double)inputImage.getHeight() * (double)height);
+            width = height;
         }
         else if (height == null) {
-            height = (float) Math.floor((double)inputImage.getHeight() / (double)inputImage.getWidth() * (double)width);
+            height = width;
         }
 
         widthInt = (int) (width * inputImage.getWidth());
