@@ -1,4 +1,4 @@
-package com.cnu.assignment02.milestone1;
+package com.cnu.assignment02;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

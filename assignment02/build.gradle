@@ -15,7 +15,7 @@ plugins {
 }
 
 // Define the main class for the application
-mainClassName = 'com.cnu.assignment02.milestone1.Main'
+mainClassName = 'com.cnu.assignment02.Main'
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
