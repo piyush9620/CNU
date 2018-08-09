@@ -29,12 +29,12 @@ CREATE TABLE `address` (
   `address` varchar(255) NOT NULL,
   `landmark` varchar(255) DEFAULT NULL,
   `location_id` int(11) unsigned NOT NULL,
-  `latitude` float unsigned DEFAULT NULL,
-  `longitude` float unsigned DEFAULT NULL,
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `address_location_id_fk_idx` (`location_id`),
   CONSTRAINT `address_location_id_fk` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=240609 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -46,4 +46,4 @@ CREATE TABLE `address` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:48
+-- Dump completed on 2018-08-09 23:13:45

@@ -18,26 +18,27 @@ USE `swaggy`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `restraunts`
+-- Table structure for table `restaurants`
 --
 
-DROP TABLE IF EXISTS `restraunts`;
+DROP TABLE IF EXISTS `restaurants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `restraunts` (
+CREATE TABLE `restaurants` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address_id` int(11) unsigned DEFAULT NULL,
-  `owner_id` int(11) unsigned NOT NULL,
-  `rating` int(11) DEFAULT '0',
+  `owner_id` int(11) unsigned DEFAULT NULL,
+  `rating` float DEFAULT '0',
+  `review_count` int(11) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `restraunt_address_id_fk_idx` (`address_id`),
-  KEY `restraunt_owner_id_fk_idx` (`owner_id`),
-  CONSTRAINT `restraunt_address_id_fk` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`),
-  CONSTRAINT `restraunt_owner_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `restaurant_address_id_fk_idx` (`address_id`),
+  KEY `restaurant_owner_id_fk_idx` (`owner_id`),
+  CONSTRAINT `restaurant_address_id_fk` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`),
+  CONSTRAINT `restaurant_owner_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=240604 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +50,4 @@ CREATE TABLE `restraunts` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:47
+-- Dump completed on 2018-08-09 23:13:45

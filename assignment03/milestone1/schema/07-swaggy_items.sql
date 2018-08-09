@@ -29,7 +29,7 @@ CREATE TABLE `items` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `type_id` int(11) unsigned DEFAULT NULL,
-  `restraunt_id` int(11) unsigned NOT NULL,
+  `restaurant_id` int(11) unsigned NOT NULL,
   `currency_id` int(11) unsigned NOT NULL,
   `price` float unsigned DEFAULT NULL,
   `rating` int(10) unsigned NOT NULL DEFAULT '0',
@@ -37,11 +37,11 @@ CREATE TABLE `items` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `b_idx` (`restraunt_id`),
+  KEY `b_idx` (`restaurant_id`),
   KEY `type_id_fk_idx` (`type_id`),
   KEY `currency_id_fk_idx` (`currency_id`),
   CONSTRAINT `items_currency_id_fk` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`),
-  CONSTRAINT `items_restraunt_id_fk` FOREIGN KEY (`restraunt_id`) REFERENCES `restraunts` (`id`),
+  CONSTRAINT `items_restaurant_id_fk` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`),
   CONSTRAINT `items_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `item_types` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -55,4 +55,4 @@ CREATE TABLE `items` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:47
+-- Dump completed on 2018-08-09 23:13:44

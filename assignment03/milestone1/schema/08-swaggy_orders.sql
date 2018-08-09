@@ -28,7 +28,7 @@ CREATE TABLE `orders` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned NOT NULL,
   `address_id` int(11) unsigned NOT NULL,
-  `restraunt_id` int(11) unsigned NOT NULL,
+  `restaurant_id` int(11) unsigned NOT NULL,
   `comments` text,
   `status` varchar(40) NOT NULL DEFAULT 'CONFIRMATION_PENDING',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,13 +36,13 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`id`),
   KEY `owner_id_fk_idx` (`owner_id`),
   KEY `address_id_fk_idx` (`address_id`),
-  KEY `restraunt_id_fk_idx` (`restraunt_id`),
+  KEY `restaurant_id_fk_idx` (`restaurant_id`),
   KEY `order_owner_id_fk_idx` (`owner_id`),
   KEY `order_address_id_fk_idx` (`address_id`),
-  KEY `order_restraunt_id_fk_idx` (`restraunt_id`),
+  KEY `order_restaurant_id_fk_idx` (`restaurant_id`),
   CONSTRAINT `order_address_id_fk` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`),
   CONSTRAINT `order_owner_id_fk` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `order_restraunt_id_fk` FOREIGN KEY (`restraunt_id`) REFERENCES `restraunts` (`id`)
+  CONSTRAINT `order_restaurant_id_fk` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ CREATE TABLE `orders` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:48
+-- Dump completed on 2018-08-09 23:17:24

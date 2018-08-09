@@ -27,21 +27,21 @@ DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `description` text,
-  `rating` int(10) unsigned NOT NULL,
-  `restraunt_id` int(10) unsigned DEFAULT NULL,
+  `rating` float unsigned NOT NULL,
+  `restaurant_id` int(10) unsigned DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   `reviewer_id` int(10) unsigned NOT NULL,
   `anonymous` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `review_restraunt_id_fk_idx` (`restraunt_id`),
+  KEY `review_restaurant_id_fk_idx` (`restaurant_id`),
   KEY `review_reviewer_id_fk_idx` (`reviewer_id`),
   KEY `review_item_id_fk_idx` (`item_id`),
   CONSTRAINT `review_item_id_fk` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `review_restraunt_id_fk` FOREIGN KEY (`restraunt_id`) REFERENCES `restraunts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `review_restaurant_id_fk` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`) ON DELETE CASCADE,
   CONSTRAINT `review_reviewer_id_fk` FOREIGN KEY (`reviewer_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=210254 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ CREATE TABLE `reviews` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:48
+-- Dump completed on 2018-08-09 23:13:44

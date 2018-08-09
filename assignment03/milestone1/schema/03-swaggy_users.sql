@@ -29,9 +29,9 @@ CREATE TABLE `users` (
   `username` varchar(45) NOT NULL,
   `fullname` varchar(100) NOT NULL,
   `mobile` int(10) unsigned DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
   `default_address_id` int(11) unsigned DEFAULT NULL,
-  `password` blob NOT NULL,
+  `password` blob,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -40,7 +40,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `mobile_UNIQUE` (`mobile`),
   KEY `default_address_id_fk_idx` (`default_address_id`),
   CONSTRAINT `user_default_address_id_fk` FOREIGN KEY (`default_address_id`) REFERENCES `address` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1326102 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-09 15:03:48
+-- Dump completed on 2018-08-09 23:13:43
