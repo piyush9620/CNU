@@ -33,6 +33,18 @@ INSERT_ITEM_TYPE_QUERY = (
     "(`type`) VALUES (%s)"
 )
 
+INSERT_USER_QUERY = (
+    "INSERT INTO users "
+    "(username, fullname) "
+    "VALUES (%s, %s)"
+)
+
+INSERT_REVIEW_QUERY = (
+    "INSERT INTO reviews "
+    "(restaurant_id, reviewer_id, rating, description, created_at) "
+    "VALUES (%s, %s, %s, %s, %s)"
+)
+
 def createLocation(locality, district, state, country, pincode):
     cursor = conn.cursor()
     data = (locality, district, state, country, pincode)
@@ -97,3 +109,19 @@ def createItemTypes(item_types):
     for item_type in item_types:
         if not getItemType(item_type):
             createItemType(item_type)
+
+def createUser(username, fullname):
+    cursor = conn.cursor()
+    cursor.execute(INSERT_USER_QUERY, (username, fullname))
+    conn.commit()
+    user_id = cursor.lastrowid
+    cursor.close()
+    return user_id
+
+def createReview(restaurant_id, reviewer_id, rating, description, created_at):
+    cursor = conn.cursor()
+    cursor.execute(INSERT_REVIEW_QUERY, (restaurant_id, reviewer_id, rating, description, created_at))
+    conn.commit()
+    review_id = cursor.lastrowid
+    cursor.close()
+    return review_id
