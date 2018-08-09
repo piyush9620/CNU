@@ -13,7 +13,7 @@ public class Main {
     private final static String INPUT_LIST_PATH = System.getenv("INPUT_LIST_PATH");
     private final static String OUTPUT_IMAGE_PATH = System.getenv("OUTPUT_IMAGE_PATH");
 
-    public static List<ImageOperation> parseInput(String operationsPath) throws IOException {
+    private static List<ImageOperation> parseInput(String operationsPath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List<ImageOperation> imageOperations = objectMapper.readValue(
                 new File(operationsPath),
@@ -25,14 +25,24 @@ public class Main {
 
     public static void main(String args[]) throws IOException {
         List<ImageOperation> imageOperations = parseInput(INPUT_LIST_PATH);
-        imageOperations.stream().forEach((imageOperation) -> {
-            try {
-                imageOperation.start();
-                imageOperation.save(OUTPUT_IMAGE_PATH);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        imageOperations
+                .stream()
+                .filter((imageOperation) -> {
+                    try {
+                        imageOperation.sanitizeInput();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return imageOperation.isValid();
+                })
+                .forEach(imageOperation -> {
+                    try {
+                        imageOperation.start();
+                        imageOperation.save(OUTPUT_IMAGE_PATH);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
         System.out.println("Done");
     }
 
