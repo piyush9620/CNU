@@ -43,7 +43,7 @@ public class ScaleOperation extends ImageOperation {
     public boolean equals(Object op) {
         if (op instanceof ScaleOperation) {
             ScaleOperation sp = (ScaleOperation) op;
-            return sp.height == height && sp.width == width;
+            return sp.height.equals(height) && sp.width.equals(width);
         }
         return false;
     }

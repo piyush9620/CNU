@@ -38,7 +38,7 @@ public class ResizeOperation extends ImageOperation {
     public boolean equals(Object op) {
         if (op instanceof ResizeOperation) {
             ResizeOperation rp = (ResizeOperation) op;
-            return rp.height == height && rp.width == width;
+            return rp.height.equals(height) && rp.width.equals(width);
         }
         return false;
     }

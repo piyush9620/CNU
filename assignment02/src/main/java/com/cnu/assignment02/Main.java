@@ -27,7 +27,7 @@ public class Main {
     public static void main(String args[]) throws IOException {
         List<ImageConverter> imageConversions = parseInput(INPUT_LIST_PATH);
         imageConversions
-                .stream()
+                .parallelStream()
                 .forEach(imageConversion -> {
                     try {
                         imageConversion.sanitizeOperations();

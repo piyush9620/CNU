@@ -45,7 +45,7 @@ public class FlipOperation extends ImageOperation {
 
     @Override
     public void sanitizeInput(BufferedImage inputImage) {
-        if (!(orientation.equals("horizontal") || orientation.equals("vertical")))
+        if (orientation == null || !(orientation.equals("horizontal") || orientation.equals("vertical")))
             isInvalid = true;
     }
 

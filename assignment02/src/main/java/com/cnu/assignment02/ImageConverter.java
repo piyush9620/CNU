@@ -31,8 +31,7 @@ public class ImageConverter {
     public void sanitizeOperations() throws IOException {
         inputFile = new File(imagePath);
         inputImage = ImageIO.read(inputFile);
-        operations.stream()
-                  .forEach(operation -> operation.sanitizeInput(inputImage));
+        operations.forEach(operation -> operation.sanitizeInput(inputImage));
     }
 
     public void save(String outputPath) throws IOException {
