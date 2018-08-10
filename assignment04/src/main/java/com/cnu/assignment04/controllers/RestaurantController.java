@@ -30,7 +30,13 @@ public class RestaurantController {
                 restaurant.getLatitude() != null &&
                 restaurant.getLongitude() != null &&
                 restaurant.getRating() != null &&
-                restaurant.getIs_open() != null
+                restaurant.getIs_open() != null &&
+                restaurant.getRating() >= 0 &&
+                restaurant.getRating() <= 5 &&
+                restaurant.getLongitude() >= -180 &&
+                restaurant.getLongitude() <= 180 &&
+                restaurant.getLatitude() >= -90 &&
+                restaurant.getLatitude() <= 90
         )) return false;
 
         for (Cuisine cuisine : restaurant.getCuisineObjects()) {
@@ -60,7 +66,8 @@ public class RestaurantController {
     @PostMapping(path = "")
     public @ResponseBody ResponseEntity<HTTPResponse> createRestaurant(@RequestBody Restaurant restaurant) {
         try {
-            restaurantRepository.save(restaurant);
+            if (validateRestaurant(restaurant)) restaurantRepository.save(restaurant);
+            else throw new Exception("INVALID INPUT");
         }
         catch (Exception e) {
             return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -91,7 +98,9 @@ public class RestaurantController {
                 restaurant.setId(restaurantId);
                 restaurantRepository.save(restaurant);
             }
-            oldRestaurant.setCity(restaurant.getCity());
+            else {
+                throw new Exception("Invalid input");
+            }
         }
         catch (Exception e) {
             return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
