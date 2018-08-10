@@ -1,5 +1,6 @@
 package com.cnu.assignment04.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CollectionId;
@@ -22,17 +23,14 @@ public class Cuisine {
     private Integer id;
 
     @NotNull
-    @Column(unique = true)
     @Size(max = 50)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "cuisines")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "cuisines")
     private Set<Restaurant> restaurants = new HashSet<>();
+
+    public Cuisine() {}
 
     public Cuisine(String name) {
         this.name = name;

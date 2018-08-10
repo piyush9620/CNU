@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
-    @Query("SELECT r FROM Restaurant r WHERE id=?1")
-    List<Restaurant> getNRestaurants(Integer id, Pageable pageable);
+    Restaurant findById(Integer id);
 
 }

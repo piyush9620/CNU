@@ -13,5 +13,5 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface CuisineRepository extends CrudRepository<Cuisine, Long> {
-
+    List<Cuisine> findByName(String name);
 }

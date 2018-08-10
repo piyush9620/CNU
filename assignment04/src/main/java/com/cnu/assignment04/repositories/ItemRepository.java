@@ -15,4 +15,6 @@ import java.util.List;
 
 public interface ItemRepository extends CrudRepository<Item, Long> {
 
+    public Item findById(Integer Id);
+
 }

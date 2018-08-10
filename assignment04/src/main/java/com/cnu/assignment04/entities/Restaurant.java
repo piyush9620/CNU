@@ -1,9 +1,12 @@
 package com.cnu.assignment04.entities;
 
+import com.cnu.assignment04.repositories.CuisineRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,10 +34,9 @@ public class Restaurant {
     @Size(max = 255)
     private String city;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
+    @ManyToMany(cascade = {
+                    CascadeType.ALL,
+                    CascadeType.ALL
             })
     @JoinTable(name = "restaurant_cuisines",
             joinColumns = { @JoinColumn(name = "cuisine_id") },
@@ -53,7 +55,11 @@ public class Restaurant {
     @ColumnDefault("1")
     private Boolean is_open;
 
-    private List<String> cuisineNames;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "restaurant")
+    private Set<Item> items = new HashSet<>();
 
     public void setName(String name) {
         this.name = name;
@@ -67,17 +73,10 @@ public class Restaurant {
         this.city = city;
     }
 
-    public void setCuisines(Set<Cuisine> cuisines) {
-        this.cuisines = cuisines;
-    }
-
-    public List<String> getCuisineNames() {
-        return cuisineNames;
-    }
-
-    @JsonProperty("cuisines")
-    public void setCuisineNames(List<String> cuisineNames) {
-        this.cuisineNames = cuisineNames;
+    public void setCuisines(List<String> cuisineNames) {
+        for (String cuisineName : cuisineNames) {
+            addCuisine(new Cuisine(cuisineName));
+        }
     }
 
     public void setLatitude(Float latitude) {
@@ -97,7 +96,57 @@ public class Restaurant {
         cuisine.getRestaurants().add(this);
     }
 
-    public Set<Cuisine> getCuisines() {
+    @JsonIgnore
+    public Set<Cuisine> getCuisineObjects() {
         return cuisines;
+    }
+
+    public Set<String> getCuisines() {
+        Set<String> cuisineNames = new HashSet<>();
+        for (Cuisine cuisine: cuisines) {
+            cuisineNames.add(cuisine.getName());
+        }
+
+        return cuisineNames;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Item> items) {
+        this.items = items;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public Float getRating() {
+        return rating;
+    }
+
+    public Boolean getIs_open() {
+        return is_open;
     }
 }

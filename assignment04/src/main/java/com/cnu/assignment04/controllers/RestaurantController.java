@@ -4,17 +4,18 @@ import com.cnu.assignment04.entities.Cuisine;
 import com.cnu.assignment04.entities.Restaurant;
 import com.cnu.assignment04.repositories.CuisineRepository;
 import com.cnu.assignment04.repositories.RestaurantRepository;
+import com.cnu.assignment04.response.FailureResponse;
+import com.cnu.assignment04.response.HTTPResponse;
+import com.cnu.assignment04.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import sun.reflect.annotation.ExceptionProxy;
 
 
 @RestController
-@RequestMapping(path="/restaurants")
+@RequestMapping(path="/api/restaurants")
 public class RestaurantController {
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -22,22 +23,79 @@ public class RestaurantController {
     @Autowired
     private CuisineRepository cuisineRepository;
 
-    @RequestMapping(path = "/", method = RequestMethod.POST)
-    public @ResponseBody Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
-        for (String cuisineName : restaurant.getCuisineNames()) {
-            Cuisine cuisine = new Cuisine(cuisineName);
-            restaurant.getCuisines().add(cuisine);
-            cuisine.getRestaurants().add(restaurant);
+    private Boolean validateRestaurant(Restaurant restaurant) {
+        if (!(
+                restaurant.getName() != null &&
+                restaurant.getCity() != null &&
+                restaurant.getLatitude() != null &&
+                restaurant.getLongitude() != null &&
+                restaurant.getRating() != null &&
+                restaurant.getIs_open() != null
+        )) return false;
+
+        for (Cuisine cuisine : restaurant.getCuisineObjects()) {
+            if (cuisine.getName() == null) {
+                return false;
+            }
         }
-        restaurantRepository.save(restaurant);
-        return null;
+
+        return true;
+    }
+
+    @GetMapping(path="/{restaurantId}")
+    public @ResponseBody ResponseEntity<HTTPResponse> getRestaurant(@PathVariable("restaurantId") Integer restaurantId) throws Exception {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId);
+        if (restaurant == null) new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<HTTPResponse>(new SuccessResponse(restaurant), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/")
+    public @ResponseBody ResponseEntity<HTTPResponse> createRestaurant(@RequestBody Restaurant restaurant) {
+        try {
+            restaurantRepository.save(restaurant);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<HTTPResponse>(new SuccessResponse(restaurant), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path="/{restaurantId}")
+    public @ResponseBody ResponseEntity<HTTPResponse> deleteRestaurant(@PathVariable("restaurantId") Integer restaurantId) throws Exception {
+        Restaurant restaurant;
+        try {
+            restaurant = restaurantRepository.findById(restaurantId);
+            if (restaurant == null) throw new Exception("Restaurant Not Found");
+            restaurantRepository.delete(restaurant);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<HTTPResponse>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping(path="/{restaurantId}")
+    public @ResponseBody ResponseEntity putRestaurant(@PathVariable("restaurantId") Integer restaurantId, @RequestBody Restaurant restaurant) throws Exception {
+        try {
+            Restaurant oldRestaurant = restaurantRepository.findById(restaurantId);
+            if (oldRestaurant == null) return new ResponseEntity<HTTPResponse>(new FailureResponse("Restaurant not found"), HttpStatus.BAD_REQUEST);
+            if (validateRestaurant(restaurant)) {
+                restaurant.setId(restaurantId);
+                restaurantRepository.save(restaurant);
+            }
+            oldRestaurant.setCity(restaurant.getCity());
+        }
+        catch (Exception e) {
+            return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<HTTPResponse>(new HTTPResponse("success"), HttpStatus.OK);
     }
 
     @GetMapping(path="/")
     public @ResponseBody Iterable<Restaurant> getRestaurants() {
-        Pageable limit = PageRequest.of(0,10);
 
         // This returns a JSON or XML with the users
-        return restaurantRepository.getNRestaurants(1, limit);
+        return restaurantRepository.findAll();
     }
+
 }
