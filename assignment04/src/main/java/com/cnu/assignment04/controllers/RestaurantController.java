@@ -32,7 +32,6 @@ public class RestaurantController {
                 restaurant.getRating() != null &&
                 restaurant.getIs_open() != null &&
                 restaurant.getRating() >= 0 &&
-                restaurant.getRating() <= 5 &&
                 restaurant.getLongitude() >= -180 &&
                 restaurant.getLongitude() <= 180 &&
                 restaurant.getLatitude() >= -90 &&
