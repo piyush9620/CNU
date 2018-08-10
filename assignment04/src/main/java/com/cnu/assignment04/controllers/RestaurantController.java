@@ -44,12 +44,20 @@ public class RestaurantController {
 
     @GetMapping(path="/{restaurantId}")
     public @ResponseBody ResponseEntity<HTTPResponse> getRestaurant(@PathVariable("restaurantId") Integer restaurantId) throws Exception {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId);
-        if (restaurant == null) new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
+        Restaurant restaurant;
+        try {
+            restaurant = restaurantRepository.findById(restaurantId);
+            if (restaurant == null) {
+                return new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<HTTPResponse>(new SuccessResponse(restaurant), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/")
+    @PostMapping(path = "")
     public @ResponseBody ResponseEntity<HTTPResponse> createRestaurant(@RequestBody Restaurant restaurant) {
         try {
             restaurantRepository.save(restaurant);
@@ -91,7 +99,7 @@ public class RestaurantController {
         return new ResponseEntity<HTTPResponse>(new HTTPResponse("success"), HttpStatus.OK);
     }
 
-    @GetMapping(path="/")
+    @GetMapping(path="")
     public @ResponseBody Iterable<Restaurant> getRestaurants() {
 
         // This returns a JSON or XML with the users

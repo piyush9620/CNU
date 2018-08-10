@@ -28,14 +28,20 @@ public class ItemController {
 
     @GetMapping(path="/{itemId}")
     public @ResponseBody ResponseEntity<HTTPResponse> getItem(@PathVariable("restaurantId") Integer restaurantId, @PathVariable("itemId") Integer itemId) throws Exception {
-        Item item = itemRepository.findById(itemId);
-        if (item == null || !item.getRestaurant().getId().equals(restaurantId)) {
+        Item item;
+        try {
+            item = itemRepository.findById(itemId);
+            if (item == null || !item.getRestaurant().getId().equals(restaurantId)) {
+                return new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception e) {
             return new ResponseEntity<HTTPResponse>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<HTTPResponse>(new SuccessResponse(item), HttpStatus.OK);
     }
 
-    @PostMapping(path="/")
+    @PostMapping(path="")
     public @ResponseBody ResponseEntity<HTTPResponse> createItem(@PathVariable("restaurantId") Integer restaurantId, @RequestBody Item item) throws Exception {
         Restaurant restaurant;
         try {
@@ -84,7 +90,7 @@ public class ItemController {
         return new ResponseEntity<HTTPResponse>(new HTTPResponse("success"), HttpStatus.OK);
     }
 
-    @GetMapping(path="/")
+    @GetMapping(path="")
     public @ResponseBody Iterable<Item> getItems(@PathVariable("restaurantId") Integer restaurantId) throws Exception {
         Restaurant restaurant = restaurantRepository.findById(restaurantId);
         return restaurant.getItems();
