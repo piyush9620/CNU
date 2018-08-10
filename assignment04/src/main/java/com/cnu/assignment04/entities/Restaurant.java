@@ -1,13 +1,13 @@
 package com.cnu.assignment04.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,17 +49,55 @@ public class Restaurant {
     @Column(name="longitude", columnDefinition="Decimal(11,8)")
     private Float longitude;
 
+    @NotNull
     @ColumnDefault("1")
     private Boolean is_open;
-}
 
-//{
-//        “id”: 12,
-//        “name”: “Flying Spaghetti Monster”,
-//        “cuisines”: [“italian”, “continental”],
-//        “city”: “Wadiya”,
-//        “latitude”: 8.121212,
-//        “longitude”: 5.35239,
-//        “rating”: 8.1,
-//        “is_open”: true
-//        }
+    private List<String> cuisineNames;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCuisines(Set<Cuisine> cuisines) {
+        this.cuisines = cuisines;
+    }
+
+    public List<String> getCuisineNames() {
+        return cuisineNames;
+    }
+
+    @JsonProperty("cuisines")
+    public void setCuisineNames(List<String> cuisineNames) {
+        this.cuisineNames = cuisineNames;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setIs_open(Boolean is_open) {
+        this.is_open = is_open;
+    }
+
+    public void addCuisine(Cuisine cuisine) {
+        cuisines.add(cuisine);
+        cuisine.getRestaurants().add(this);
+    }
+
+    public Set<Cuisine> getCuisines() {
+        return cuisines;
+    }
+}

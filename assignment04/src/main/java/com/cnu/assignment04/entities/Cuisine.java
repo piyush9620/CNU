@@ -1,5 +1,7 @@
 package com.cnu.assignment04.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,4 +33,24 @@ public class Cuisine {
             },
             mappedBy = "cuisines")
     private Set<Restaurant> restaurants = new HashSet<>();
+
+    public Cuisine(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Restaurant> getRestaurants() {
+        return restaurants;
+    }
+
+    public void setRestaurants(Set<Restaurant> restaurants) {
+        this.restaurants = restaurants;
+    }
 }
