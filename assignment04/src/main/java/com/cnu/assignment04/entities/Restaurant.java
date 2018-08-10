@@ -1,11 +1,16 @@
 package com.cnu.assignment04.entities;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
@@ -14,36 +19,47 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotNull
+    @Size(max = 255)
     private String name;
 
+    @NotNull
+    @ColumnDefault("0")
     private Float rating;
 
-    private Integer review_count;
+    @NotNull
+    @Size(max = 255)
+    private String city;
 
-    @OneToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "restaurant_cuisines",
+            joinColumns = { @JoinColumn(name = "cuisine_id") },
+            inverseJoinColumns = { @JoinColumn(name = "restaurant_id") })
+    private Set<Cuisine> cuisines = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "restaurant_id")
-    private List<Item> items;
+    @NotNull
+    @Column(name="latitude", columnDefinition="Decimal(10,8)")
+    private Float latitude;
 
-    @CreationTimestamp
-    private Date created_at;
+    @NotNull
+    @Column(name="longitude", columnDefinition="Decimal(11,8)")
+    private Float longitude;
 
-    @UpdateTimestamp
-    private Date updated_at;
+    @ColumnDefault("1")
+    private Boolean is_open;
 }
 
-//+--------------+------------------+------+-----+-------------------+-----------------------------+
-//| Field        | Type             | Null | Key | Default           | Extra                       |
-//+--------------+------------------+------+-----+-------------------+-----------------------------+
-//| id           | int(11) unsigned | NO   | PRI | NULL              | auto_increment              |
-//| name         | varchar(255)     | NO   |     | NULL              |                             |
-//| address_id   | int(11) unsigned | YES  | MUL | NULL              |                             |
-//| owner_id     | int(11) unsigned | YES  | MUL | NULL              |                             |
-//| rating       | float            | YES  |     | 0                 |                             |
-//| review_count | int(11)          | NO   |     | 0                 |                             |
-//| created_at   | datetime         | YES  |     | CURRENT_TIMESTAMP |                             |
-//| updated_at   | datetime         | YES  |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-//+--------------+------------------+------+-----+-------------------+-----------------------------+
+//{
+//        “id”: 12,
+//        “name”: “Flying Spaghetti Monster”,
+//        “cuisines”: [“italian”, “continental”],
+//        “city”: “Wadiya”,
+//        “latitude”: 8.121212,
+//        “longitude”: 5.35239,
+//        “rating”: 8.1,
+//        “is_open”: true
+//        }
