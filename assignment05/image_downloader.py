@@ -32,10 +32,12 @@ class ImageDownloader(threading.Thread):
             try:
                 image = next(self.__images)
                 if not image:
-                    continue
+                    thread_lock.release()
+                    break
             except StopIteration:
+                thread_lock.release()
                 break
 
             thread_lock.release()
-            self.downloadImage(image)
+            self.downloadImage(image.strip())
 
