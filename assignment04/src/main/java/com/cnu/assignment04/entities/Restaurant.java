@@ -39,8 +39,8 @@ public class Restaurant {
                     CascadeType.ALL
             })
     @JoinTable(name = "restaurant_cuisines",
-            joinColumns = { @JoinColumn(name = "cuisine_id") },
-            inverseJoinColumns = { @JoinColumn(name = "restaurant_id") })
+            joinColumns = { @JoinColumn(name = "restaurant_id") },
+            inverseJoinColumns = { @JoinColumn(name = "cuisine_id") })
     private Set<Cuisine> cuisines = new HashSet<>();
 
     @NotNull
