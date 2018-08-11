@@ -41,7 +41,7 @@ public class ItemController {
         return new ResponseEntity<HTTPResponse>(new SuccessResponse(item), HttpStatus.OK);
     }
 
-    @PostMapping(path="")
+    @PostMapping(path="", produces = "application/json", consumes = "application/json")
     public @ResponseBody ResponseEntity<HTTPResponse> createItem(@PathVariable("restaurantId") Integer restaurantId, @RequestBody Item item) throws Exception {
         Restaurant restaurant;
         try {
