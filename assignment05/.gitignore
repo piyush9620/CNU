@@ -1,0 +1,6 @@
+venv/
+images.txt
+images/
+.DS_Store
+__pycache__/
+.vscode/
