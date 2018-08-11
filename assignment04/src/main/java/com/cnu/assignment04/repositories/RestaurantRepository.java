@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Set;
 
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
@@ -14,5 +15,11 @@ import java.util.List;
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     Restaurant findById(Integer id);
+
+    Set<Restaurant> findAllByNameContainingAndCityContaining(String name, String city);
+
+    @Query("SELECT r FROM Restaurant r JOIN r.cuisines c WHERE c.name LIKE %?3% " +
+            "AND r.name LIKE %?1% AND r.city LIKE %?2%")
+    Set<Restaurant> findAllByNameContainingAndCityContainingAndCuisineContaining(String name, String city, String cuisineName);
 
 }

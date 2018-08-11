@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.annotation.ExceptionProxy;
+
+import java.util.Set;
 
 
 @RestController
@@ -48,7 +49,10 @@ public class RestaurantController {
     }
 
     @GetMapping(path="/{restaurantId}")
-    public @ResponseBody ResponseEntity<HTTPResponse> getRestaurant(@PathVariable("restaurantId") Integer restaurantId) throws Exception {
+    public @ResponseBody ResponseEntity<HTTPResponse> getRestaurant(
+            @PathVariable("restaurantId") Integer restaurantId
+    ) throws Exception {
+
         Restaurant restaurant;
         try {
             restaurant = restaurantRepository.findById(restaurantId);
@@ -108,10 +112,23 @@ public class RestaurantController {
     }
 
     @GetMapping(path="")
-    public @ResponseBody Iterable<Restaurant> getRestaurants() {
+    public @ResponseBody
+    ResponseEntity<HTTPResponse> getRestaurants(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "cuisine", required = false) String cuisine,
+            @RequestParam(value = "city", required = false) String city) {
 
-        // This returns a JSON or XML with the users
-        return restaurantRepository.findAll();
+        Set<Restaurant> restaurants;
+        if (name == null) name = "";
+        if (city == null) city = "";
+        if (cuisine == null) {
+            restaurants = restaurantRepository.findAllByNameContainingAndCityContaining(name, city);
+        }
+        else {
+            restaurants = restaurantRepository.findAllByNameContainingAndCityContainingAndCuisineContaining(name, city, cuisine);
+        }
+
+        return new ResponseEntity<HTTPResponse>(new SuccessResponse(restaurants), HttpStatus.OK);
     }
 
 }
