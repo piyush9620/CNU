@@ -82,6 +82,8 @@ public class ItemController {
                 item.setRestaurant(restaurant);
                 itemRepository.save(item);
             }
+            else
+                throw new Exception("INVALID DATA");
         }
         catch (Exception e) {
             return new ResponseEntity<HTTPResponse>(new FailureResponse(e.getMessage()), HttpStatus.BAD_REQUEST);

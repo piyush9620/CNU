@@ -3,6 +3,7 @@ package com.cnu.assignment04;
 import com.cnu.assignment04.entities.Restaurant;
 import com.cnu.assignment04.repositories.RestaurantRepository;
 import com.cnu.assignment04.response.SuccessResponse;
+import com.cnu.assignment04.utils.AssignmentResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.cnu.assignment04.utils.AssignmentResultHandler.assignTo;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -60,14 +63,17 @@ public class RestaurantControllerTest {
     }
 
     private int generateRestaurant(JSONObject restaurant) throws Exception {
+        AssignmentResult result = new AssignmentResult();
+
         this.mockMvc.perform(
                 post("/api/restaurants")
                         .content(restaurant.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-        );
+                )
+                .andDo(assignTo("$.data.id", result));
 
-        return 1;
+        return (Integer)result.getValue();
     }
 
     @Test
@@ -156,7 +162,7 @@ public class RestaurantControllerTest {
         Integer restaurantId = generateRestaurant(restaurant);
 
         this.mockMvc.perform(
-                        get("/api/restaurants/" + 1)
+                        get("/api/restaurants/" + restaurantId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -254,14 +260,7 @@ public class RestaurantControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.status").value("success"))
-                .andExpect(jsonPath("$.data.id").value(restaurantId))
-                .andExpect(jsonPath("$.data.name").value(newRestaurant.get("name")))
-                .andExpect(jsonPath("$.data.rating").value(newRestaurant.get("rating")))
-                .andExpect(jsonPath("$.data.latitude").value(newRestaurant.get("latitude")))
-                .andExpect(jsonPath("$.data.longitude").value(newRestaurant.get("longitude")))
-                .andExpect(jsonPath("$.data.is_open").value(newRestaurant.get("is_open")))
-                .andExpect(jsonPath("$.data.city").value(newRestaurant.get("city")));
+                .andExpect(jsonPath("$.status").value("success"));
     }
 
     @Test
@@ -357,9 +356,41 @@ public class RestaurantControllerTest {
 
         Integer restaurantId2 = generateRestaurant(restaurant2);
 
+        this.mockMvc.perform(
+                get("/api/restaurants/?city=" + restaurant1.get("city"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.status").value("success"))
+                .andExpect(jsonPath("$.data[0].id").isNumber())
+                .andExpect(jsonPath("$.data[0].name").value(restaurant1.get("name")))
+                .andExpect(jsonPath("$.data[0].rating").value(restaurant1.get("rating")))
+                .andExpect(jsonPath("$.data[0].latitude").value(restaurant1.get("latitude")))
+                .andExpect(jsonPath("$.data[0].longitude").value(restaurant1.get("longitude")))
+                .andExpect(jsonPath("$.data[0].cuisines").value(Matchers.hasSize(cuisines1.length())))
+                .andExpect(jsonPath("$.data[0].is_open").value(restaurant1.get("is_open")))
+                .andExpect(jsonPath("$.data[0].city").value(restaurant1.get("city")));
 
+        this.mockMvc.perform(
+                get("/api/restaurants/?name=" + restaurant2.get("name"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.status").value("success"))
+                .andExpect(jsonPath("$.data[0].id").isNumber())
+                .andExpect(jsonPath("$.data[0].name").value(restaurant2.get("name")))
+                .andExpect(jsonPath("$.data[0].rating").value(restaurant2.get("rating")))
+                .andExpect(jsonPath("$.data[0].latitude").value(restaurant2.get("latitude")))
+                .andExpect(jsonPath("$.data[0].longitude").value(restaurant2.get("longitude")))
+                .andExpect(jsonPath("$.data[0].cuisines").value(Matchers.hasSize(cuisines2.length())))
+                .andExpect(jsonPath("$.data[0].is_open").value(restaurant2.get("is_open")))
+                .andExpect(jsonPath("$.data[0].city").value(restaurant2.get("city")));
 
     }
-
-
 }
