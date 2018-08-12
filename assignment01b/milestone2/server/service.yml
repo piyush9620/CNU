@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: asingla-ass01b-server-service
+  namespace: cnu2018-dev
+spec:
+  selector:
+    app: asingla-ass01b-server-deployment
+  ports:
+  - protocol: TCP
+    port: 9999
+    targetPort: 9999
