@@ -30,3 +30,5 @@ class Review(PermanentModel):
     all_objects = MultiPassThroughManager(PermanentQuerySet)
     stars = models.FloatField()
     restaurant = models.ForeignKey(Restaurant, related_name="reviews", on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()

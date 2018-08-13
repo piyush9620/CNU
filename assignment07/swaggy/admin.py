@@ -18,6 +18,10 @@ class RestaurantAdmin(admin.ModelAdmin):
         "categories_name", "review_count", "is_open", "removed"
     )
 
+    list_filter = (
+        "city", "is_open", "categories__name"
+    )
+
     def stars(self, obj):
         return list(obj.reviews.aggregate(Avg('stars')).values())[0]
 
@@ -31,7 +35,20 @@ class RestaurantAdmin(admin.ModelAdmin):
     categories_name.short_description = 'Categories'
 
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("id", "restaurant_id", "stars", "date", "text")
+    list_filter = ("restaurant__id", )
+
+    def restaurant_id(self, obj):
+        return obj.restaurant.name
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
 # Register your models here.
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
-admin.site.register(Review)
+admin.site.register(Review, ReviewAdmin)
