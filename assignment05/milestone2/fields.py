@@ -1,15 +1,15 @@
 from builtins import object, isinstance, str, TypeError
 
 
-class Field(object):
-    def __init__(self, init_val=None):
-        self._value = init_val
-
-    def __get__(self, instance, owner):
-        return self._value
+class Field:
+    def __init__(self, init_val = None):
+        self._val = init_val
 
     def __set__(self, instance, value):
-        self._value = value
+        self._val = value
+
+    def __get__(self, instance, value):
+        return self._val
 
 
 class Fields:

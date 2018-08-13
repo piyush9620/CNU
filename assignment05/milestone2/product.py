@@ -11,6 +11,8 @@ class Product(Base):
 
 
 p = Product(name="a")
-Product.findByName("A")
-
+Product.findByNameOrIdAndBOrC("A", "b", 1, "d")
+print("A","b", "c")
 p.save()
+Product.all()
+Product.get(1)
