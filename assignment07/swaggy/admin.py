@@ -7,11 +7,7 @@ from django.db.models import Avg, signals
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'businesses_count')
-
-    def businesses_count(self, obj):
-        # count field2
-        return obj.restaurants.count()
+    list_display = ('id', 'name', 'business_count')
 
 
 class RestaurantAdmin(admin.ModelAdmin):
@@ -24,12 +20,6 @@ class RestaurantAdmin(admin.ModelAdmin):
         "city", "is_open", "categories__name"
     )
 
-    def stars(self, obj):
-        return list(obj.reviews.aggregate(Avg('stars')).values())[0]
-
-    def review_count(self, obj):
-        return obj.reviews.count()
-
     def categories_name(self, obj):
         return ", ".join([a.name for a in obj.categories.all()])
 
@@ -39,7 +29,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("id", "restaurant_id", "stars", "date", "text")
-    list_filter = ("restaurant__id", )
+    list_filter = ("restaurant__id",)
 
     def restaurant_id(self, obj):
         return obj.restaurant.name
@@ -49,7 +39,6 @@ class ReviewAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
-
 
 
 # Register your models here.

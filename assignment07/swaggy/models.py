@@ -10,6 +10,7 @@ from django_permanent.query import PermanentQuerySet
 class Category(PermanentModel):
     all_objects = MultiPassThroughManager(PermanentQuerySet)
     name = models.CharField(max_length=200)
+    business_count = models.IntegerField(default=0)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -27,6 +28,8 @@ class Restaurant(PermanentModel):
     longitude = models.DecimalField(max_digits=11, decimal_places=8)
     is_open = models.BooleanField()
     categories = models.ManyToManyField(Category, related_name="restaurants")
+    stars = models.FloatField(default=0)
+    review_count = models.IntegerField(default=0)
 
 
 class Review(PermanentModel):
@@ -44,3 +47,9 @@ def validate_review_stars(sender, instance, **kwargs):
         pass
     else:
         raise ValidationError("Stars must be between 0 and 5")
+
+
+@receiver(signals.post_save, sender=Restaurant)
+def update_categories(sender, instance, **kwargs):
+
+    return 1
