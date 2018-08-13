@@ -1,5 +1,3 @@
-from traitlets import Integer
-
 from fields import Field, Fields
 
 
@@ -20,13 +18,14 @@ class Base(object):
                 setattr(cls, attr_name, attr_val)
                 data.append(attr_name)
 
-        cls._qkeys =  ",".join(["`{}`".format(k) for k in data])
-        cls._table_name = "".lower()
+        cls._qkeys = ",".join(["`{}`".format(k) for k in data])
+        cls._table_name = cls.__name__.lower()
 
         def _generate_findBy_function(param):
             def func(value):
                 query = "SELECT {} FROM {} WHERE {} = \"{}\""\
                     .format(cls._qkeys, cls._table_name, param, value)
+                print(query)
                 #     Run query
                 #     create_obj_from_result
 
@@ -37,6 +36,7 @@ class Base(object):
             def func(value1, value2):
                 query = "SELECT {} FROM {} WHERE {} = \"{}\" OR {} = \"{}\""\
                     .format(cls._qkeys, cls._table_name, param1, value1, param2, value2)
+                print(query)
                 #     Run query
                 #     create_obj_from_result
 
@@ -47,6 +47,7 @@ class Base(object):
             def func(value1, value2):
                 query = "SELECT {} FROM {} WHERE {} = \"{}\" AND {} = \"{}\""\
                     .format(cls._qkeys, cls._table_name, param1, value1, param2, value2)
+                print(query)
                 #     Run query
                 #     create_obj_from_result
 
@@ -64,13 +65,37 @@ class Base(object):
                         _generate_findByAnd_function(i, j)
                         _generate_findByAnd_function(j, i)
 
+        def _generate_get_function():
+            def get(value):
+                query = "SELECT {} FROM {} WHERE {} = {}"\
+                    .format(cls._qkeys, cls._table_name, "id", value)
+                print(query)
+            setattr(cls, get.__name__, get)
+
+        def _generate_all_function():
+            def all():
+                query = "SELECT {} FROM {}"\
+                    .format(cls._qkeys, cls._table_name)
+                print(query)
+            setattr(cls, all.__name__, all)
+
+        # def _generate_save_function():
+
+        def _generate_save_function():
+            def save(self):
+                ks = []
+                vs = []
+                for k in data:
+                    if getattr(self, k) is not None:
+                        ks.append(k)
+                        vs.append(getattr(self, k))
+                query = "INSERT INTO {} ({}) VALUES ({})"\
+                    .format(cls._table_name, ",".join(["`{}`".format(k) for k in ks]), ",".join(["\"{}\"".format(v) for v in vs]))
+                print(query)
+
+            setattr(cls, save.__name__, save)
+
         _generate_all_findBy_function()
-
-    def save(self):
-        pass
-
-    def all(self):
-        pass
-
-    def get(self, id):
-        pass
+        _generate_get_function()
+        _generate_all_function()
+        _generate_save_function()

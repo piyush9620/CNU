@@ -11,4 +11,6 @@ class Product(Base):
 
 
 p = Product(name="a")
-pass
+Product.findByName("A")
+
+p.save()
