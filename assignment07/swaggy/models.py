@@ -1,4 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import signals
+from django.dispatch import receiver
 from django_permanent.managers import MultiPassThroughManager
 from django_permanent.models import PermanentModel
 from django_permanent.query import PermanentQuerySet
@@ -28,7 +31,16 @@ class Restaurant(PermanentModel):
 
 class Review(PermanentModel):
     all_objects = MultiPassThroughManager(PermanentQuerySet)
-    stars = models.FloatField()
+    stars = models.IntegerField()
     restaurant = models.ForeignKey(Restaurant, related_name="reviews", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+
+
+@receiver(signals.pre_save, sender=Review)
+def validate_review_stars(sender, instance, **kwargs):
+    if instance.stars is not None and isinstance(instance.stars, int) \
+            and 5 >= instance.stars >= 0:
+        pass
+    else:
+        raise ValidationError("Stars must be between 0 and 5")

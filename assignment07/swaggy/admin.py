@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.dispatch import receiver
+
 from swaggy.models import Restaurant, Review
 from swaggy.models import Category
-from django.db.models import Avg
+from django.db.models import Avg, signals
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -47,6 +49,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
 
 # Register your models here.
 admin.site.register(Category, CategoryAdmin)
