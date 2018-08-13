@@ -14,11 +14,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = (
-        "name", "neighbourhood", "address", "city", "state", "postal_code", "latitude", "longitude", "stars", "category_name",
-        "review_count", "is_open"
+        "name", "neighbourhood", "address", "city", "state", "postal_code", "latitude", "longitude", "stars",
+        "categories_name", "review_count", "is_open", "removed"
     )
-
-    list_display_links = ('category_name', )
 
     def stars(self, obj):
         return list(obj.reviews.aggregate(Avg('stars')).values())[0]
@@ -26,11 +24,11 @@ class RestaurantAdmin(admin.ModelAdmin):
     def review_count(self, obj):
         return obj.reviews.count()
 
-    def category_name(self, obj):
-        return obj.category.name
+    def categories_name(self, obj):
+        return ", ".join([a.name for a in obj.categories.all()])
 
-    category_name.admin_order_field = "category"
-    category_name.short_description = 'Category'
+    categories_name.admin_order_field = "categories"
+    categories_name.short_description = 'Categories'
 
 
 # Register your models here.
