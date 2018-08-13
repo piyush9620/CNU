@@ -1,0 +1,5 @@
+FROM alpine:3.7
+
+USER root
+
+ADD . /webclient

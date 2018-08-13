@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: cnu2018-dev
+  name: asingla-ass01b-server-deployment
+spec:
+  selector:
+    matchLabels:
+      app: asingla-ass01b-server-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: asingla-ass01b-server-deployment
+    spec:
+      serviceAccountName: deployment
+      containers:
+      - name: asingla-ass01b-server-deployment
+        image: registry2.swarm.devfactory.com/asingla-cnu-ass01b-server
+        ports:
+        - containerPort: 9999
+        env:
+        - name: PORT
+          value: "9999"
+        volumeMounts:
+          - name: servervol
+            mountPath: /serverdata
+      volumes:
+      - name: servervol
+        persistentVolumeClaim:
+          claimName: asingla-ass01b-servervol-claim
