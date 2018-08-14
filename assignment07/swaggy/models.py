@@ -59,7 +59,6 @@ def update_categories(sender, instance, **kwargs):
         category.save()
 
 
-
 @receiver(signals.post_save, sender=Review)
 def update_restaurant(sender, instance, **kwargs):
     restaurant = instance.restaurant
