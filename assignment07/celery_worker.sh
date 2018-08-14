@@ -1,3 +1,3 @@
 #!/bin/sh
 
-celery multi start worker1 -A assignment07;
+celery -A assignment07 worker -l info;
