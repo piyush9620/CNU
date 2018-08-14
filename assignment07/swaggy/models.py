@@ -52,11 +52,12 @@ def validate_review_stars(sender, instance, **kwargs):
 @receiver(signals.m2m_changed, sender=Restaurant.categories.through)
 def update_categories(sender, instance, **kwargs):
     for category in instance.categories.all():
-        if kwargs['action'] == 'pre_remove':
+        if kwargs['action'].startswith('pre_'):
             category.business_count -= 1
-        elif kwargs['action'] == 'post_add':
+        elif kwargs['action'].startswith('post_'):
             category.business_count += 1
         category.save()
+
 
 
 @receiver(signals.post_save, sender=Review)
