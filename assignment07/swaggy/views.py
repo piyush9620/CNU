@@ -9,10 +9,12 @@ from swaggy.tasks import generate_random_review
 
 
 def index(request):
-    restaurant_id = int(request.GET.get("restaurant_id"))
+    restaurant_id = request.GET.get("restaurant_id")
     count = int(request.GET.get("count", 1))
     if not restaurant_id or not count:
         return HttpResponseBadRequest("Give me something!")
+
+    restaurant_id = int(restaurant_id)
 
     if not Restaurant.objects.get(pk=restaurant_id):
         return HttpResponseBadRequest("You don't know nothing!")
