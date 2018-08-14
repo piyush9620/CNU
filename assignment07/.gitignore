@@ -4,3 +4,4 @@ __pycache__/
 .DS_Store
 .vscode/
 assignment07/config.py
+static/admin/

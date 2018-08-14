@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Start Gunicorn processes
+python3 manage.py collectstatic
+
 python3 manage.py migrate
 
 nginx
