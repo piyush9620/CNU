@@ -48,21 +48,14 @@ def validate_review_stars(sender, instance, **kwargs):
     else:
         raise ValidationError("Stars must be between 0 and 5")
 
-#
-# @receiver(signals.pre_save, sender=Restaurant)
-# def update_categories2(sender, instance, **kwargs):
-#     if instance.id is not None:
-#         old_instance = Restaurant.objects.get(id=instance.id)
-#         categories = old_instance.categories.all()
-#         for category in categories:
-#             category.business_count -= 1
-#             category.save()
-
 
 @receiver(signals.m2m_changed, sender=Restaurant.categories.through)
 def update_categories(sender, instance, **kwargs):
     for category in instance.categories.all():
-        category.business_count += 1
+        if kwargs['action'] == 'pre_remove':
+            category.business_count -= 1
+        elif kwargs['action'] == 'post_add':
+            category.business_count += 1
         category.save()
 
 
