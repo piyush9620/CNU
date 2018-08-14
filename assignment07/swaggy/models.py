@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import signals
+from django.db.models import signals, Avg
 from django.dispatch import receiver
 from django_permanent.managers import MultiPassThroughManager
 from django_permanent.models import PermanentModel
@@ -48,8 +48,27 @@ def validate_review_stars(sender, instance, **kwargs):
     else:
         raise ValidationError("Stars must be between 0 and 5")
 
+#
+# @receiver(signals.pre_save, sender=Restaurant)
+# def update_categories2(sender, instance, **kwargs):
+#     if instance.id is not None:
+#         old_instance = Restaurant.objects.get(id=instance.id)
+#         categories = old_instance.categories.all()
+#         for category in categories:
+#             category.business_count -= 1
+#             category.save()
 
-@receiver(signals.post_save, sender=Restaurant)
+
+@receiver(signals.m2m_changed, sender=Restaurant.categories.through)
 def update_categories(sender, instance, **kwargs):
+    for category in instance.categories.all():
+        category.business_count += 1
+        category.save()
 
-    return 1
+
+@receiver(signals.post_save, sender=Review)
+def update_restaurant(sender, instance, **kwargs):
+    restaurant = instance.restaurant
+    restaurant.review_count += 1
+    restaurant.stars = list(restaurant.reviews.aggregate(Avg('stars')).values())[0]
+    restaurant.save()

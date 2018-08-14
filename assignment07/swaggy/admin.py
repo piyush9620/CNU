@@ -8,6 +8,7 @@ from django.db.models import Avg, signals
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'business_count')
+    readonly_fields = ('business_count', )
 
 
 class RestaurantAdmin(admin.ModelAdmin):
@@ -19,6 +20,8 @@ class RestaurantAdmin(admin.ModelAdmin):
     list_filter = (
         "city", "is_open", "categories__name"
     )
+
+    readonly_fields = ("removed", "review_count", "stars")
 
     def categories_name(self, obj):
         return ", ".join([a.name for a in obj.categories.all()])
