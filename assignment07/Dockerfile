@@ -18,4 +18,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN pip3 install -r requirements.txt
 
+COPY assignment07/sample.config.py assignment07/config.py
+
 CMD ["sh", "start.sh"]
