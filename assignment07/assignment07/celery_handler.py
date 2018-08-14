@@ -1,13 +1,14 @@
 import os
 from celery import Celery
+from .config import config
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'assignment07.settings')
 
 app = Celery(
     'assignment07',
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0",
+    broker=config['CELERY_BROKER'],
+    backend=config['CELERY_BACKEND'],
     include=['swaggy.tasks', ]
 )
 

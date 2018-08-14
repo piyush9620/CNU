@@ -1,15 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-# Start Gunicorn processes
-python3 manage.py collectstatic
+if [ "$CELERY_WORKER" ]; then
+    /bin/sh celery_worker.sh;
+fi;
 
-python3 manage.py migrate
-
-nginx
-
-echo Starting Gunicorn.
-exec gunicorn assignment07.wsgi:application \
-    --bind 0.0.0.0:8000 \
-    --workers 3
-
-
+if [ "$SERVER" ]; then
+    /bin/sh server.sh;
+fi;
