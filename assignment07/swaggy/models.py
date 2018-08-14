@@ -62,6 +62,6 @@ def update_categories(sender, instance, **kwargs):
 @receiver(signals.post_save, sender=Review)
 def update_restaurant(sender, instance, **kwargs):
     restaurant = instance.restaurant
-    restaurant.review_count += 1
+    restaurant.review_count = restaurant.reviews.count()
     restaurant.stars = list(restaurant.reviews.aggregate(Avg('stars')).values())[0]
     restaurant.save()
