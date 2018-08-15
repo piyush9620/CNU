@@ -4,12 +4,6 @@ from sweggy.models import Restaurant, Cuisine, Item
 from rest_framework import serializers
 
 
-class ItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Item
-        fields = "__all__"
-
-
 class CuisineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cuisine
@@ -36,3 +30,30 @@ class RestaurantSerializer(serializers.ModelSerializer):
         restaurant.save()
         restaurant.cuisines.add(*cuisines)
         return restaurant
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.city = validated_data['city']
+        instance.latitude = validated_data['latitude']
+        instance.longitude = validated_data['longitude']
+        instance.rating = validated_data['rating']
+        instance.is_open = validated_data['is_open']
+        instance.save()
+        cuisine_ids = [item['id'] for item in validated_data['cuisines']]
+        cuisines = Cuisine.objects.filter(pk__in=cuisine_ids)
+        instance.cuisines.remove(*instance.cuisines.all())
+        instance.cuisines.add(*cuisines)
+        return instance
+
+    def to_representation(self, instance):
+        data = super(RestaurantSerializer, self).to_representation(instance)
+        data['cuisines'] = [item["name"] for item in data['cuisines']]
+        return data
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    restaurant = RestaurantSerializer()
+
+    class Meta:
+        model = Item
+        fields = "__all__"
