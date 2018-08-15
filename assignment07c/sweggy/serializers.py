@@ -58,6 +58,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     restaurant = RestaurantSerializer(read_only=True)
+    price = serializers.FloatField(min_value=0)
 
     restaurant_id = serializers.PrimaryKeyRelatedField(
         queryset=Restaurant.objects.all(),
@@ -69,9 +70,7 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = "__all__"
 
-    def validate(self, attrs):
-        if attrs['price'] < 0:
-            raise ValidationError("Price cannot be less than 0")
-
-        return attrs
-
+    def to_representation(self, instance):
+        data = super(ItemSerializer, self).to_representation(instance)
+        data['price'] = "${}".format(data['price'])
+        return data
