@@ -1,5 +1,7 @@
 from abc import ABC
 
+from rest_framework.exceptions import ValidationError
+
 from sweggy.models import Restaurant, Cuisine, Item
 from rest_framework import serializers
 
@@ -17,6 +19,9 @@ class CuisineSerializer(serializers.ModelSerializer):
 
 class RestaurantSerializer(serializers.ModelSerializer):
     cuisines = CuisineSerializer(many=True)
+    latitude = serializers.DecimalField(max_digits=10, decimal_places=8, min_value=-90, max_value=90)
+    longitude = serializers.DecimalField(max_digits=11, decimal_places=8, min_value=-180, max_value=180)
+    rating = serializers.IntegerField(min_value=0)
 
     class Meta:
         model = Restaurant
@@ -52,8 +57,16 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    restaurant = RestaurantSerializer()
+    # restaurant = RestaurantSerializer()
+    restaurant_id = serializers.IntegerField()
 
     class Meta:
         model = Item
-        fields = "__all__"
+        exclude = ("restaurant", )
+
+    def validate(self, attrs):
+        if attrs['price'] < 0:
+            raise ValidationError("Price cannot be less than 0")
+
+        return attrs
+
