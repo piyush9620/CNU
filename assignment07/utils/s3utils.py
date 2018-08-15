@@ -14,4 +14,4 @@ def download_image_to_s3(image_url, image_id):
     data = requests.get(image_url).content
 
     s3.Bucket(BUCKET_NAME).put_object(Key=key, Body=data)
-    return key
+    return "s3://{}/{}".format(BUCKET_NAME, key)
