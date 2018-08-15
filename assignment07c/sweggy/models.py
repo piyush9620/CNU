@@ -9,8 +9,8 @@ class Cuisine(models.Model):
 class Restaurant(models.Model):
     name = models.CharField(max_length=200)
     city = models.CharField(max_length=200, blank=True)
-    latitude = models.DecimalField(max_digits=10, decimal_places=8)
-    longitude = models.DecimalField(max_digits=11, decimal_places=8)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     is_open = models.BooleanField()
     rating = models.FloatField()
     cuisines = models.ManyToManyField(Cuisine, related_name="restaurants")

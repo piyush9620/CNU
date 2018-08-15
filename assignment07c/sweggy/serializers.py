@@ -19,8 +19,8 @@ class CuisineSerializer(serializers.ModelSerializer):
 
 class RestaurantSerializer(serializers.ModelSerializer):
     cuisines = CuisineSerializer(many=True)
-    latitude = serializers.DecimalField(max_digits=10, decimal_places=8, min_value=-90, max_value=90)
-    longitude = serializers.DecimalField(max_digits=11, decimal_places=8, min_value=-180, max_value=180)
+    latitude = serializers.FloatField(min_value=-90, max_value=90)
+    longitude = serializers.FloatField(min_value=-180, max_value=180)
     rating = serializers.FloatField(min_value=0)
 
     class Meta:
