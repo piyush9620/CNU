@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.dispatch import receiver
 
-from swaggy.models import Restaurant, Review
+from swaggy.models import Restaurant, Review, Image
 from swaggy.models import Category
 from django.db.models import Avg, signals
 
@@ -14,7 +14,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = (
         "name", "neighbourhood", "address", "city", "state", "postal_code", "latitude", "longitude", "stars",
-        "categories_name", "review_count", "is_open", "removed"
+        "categories_name", "review_count", "is_open", "removed", "images_added"
     )
 
     list_filter = (
@@ -44,7 +44,12 @@ class ReviewAdmin(admin.ModelAdmin):
         return False
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ("name", "link", "restaurant_id")
+
+
 # Register your models here.
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(Image, ImageAdmin)

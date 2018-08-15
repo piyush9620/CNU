@@ -1,3 +1,4 @@
+from celery import group
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import signals, Avg
@@ -30,6 +31,7 @@ class Restaurant(PermanentModel):
     categories = models.ManyToManyField(Category, related_name="restaurants")
     stars = models.FloatField(default=0)
     review_count = models.IntegerField(default=0)
+    images_added = models.BooleanField(default=False)
 
 
 class Review(PermanentModel):
@@ -38,6 +40,13 @@ class Review(PermanentModel):
     restaurant = models.ForeignKey(Restaurant, related_name="reviews", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+
+
+class Image(PermanentModel):
+    all_objects = MultiPassThroughManager(PermanentQuerySet)
+    link = models.TextField()
+    restaurant = models.ForeignKey(Restaurant, related_name="images", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
 
 
 @receiver(signals.pre_save, sender=Review)
@@ -65,3 +74,10 @@ def update_restaurant(sender, instance, **kwargs):
     restaurant.review_count = restaurant.reviews.count()
     restaurant.stars = list(restaurant.reviews.aggregate(Avg('stars')).values())[0]
     restaurant.save()
+
+
+@receiver(signals.post_save, sender=Restaurant)
+def update_images_added(sender, instance, **kwargs):
+    if kwargs['created']:
+        from swaggy.tasks import download_images
+        download_images.s(instance.id, instance.name).delay()
