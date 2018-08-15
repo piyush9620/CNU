@@ -57,12 +57,17 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    # restaurant = RestaurantSerializer()
-    restaurant_id = serializers.IntegerField()
+    restaurant = RestaurantSerializer(read_only=True)
+
+    restaurant_id = serializers.PrimaryKeyRelatedField(
+        queryset=Restaurant.objects.all(),
+        source='restaurant',
+        write_only=True
+    )
 
     class Meta:
         model = Item
-        exclude = ("restaurant", )
+        fields = "__all__"
 
     def validate(self, attrs):
         if attrs['price'] < 0:
